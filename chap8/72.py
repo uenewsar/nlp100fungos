@@ -45,6 +45,7 @@ class Instance(object):
         self.sentence = None
         self.words = None
         self.feat = None
+        self.feat_vec = None
 
 def create_feat(org_words):
 
@@ -72,6 +73,10 @@ def create_feat(org_words):
     
     feat = {}
 
+    # add BOS and EOS
+    words.insert(0, 'BOS')
+    words.append('EOS')
+
     ## make unigram
     for i in range(len(words)):
         if words[i] == '__stop__':
@@ -79,9 +84,6 @@ def create_feat(org_words):
         feat[words[i]] = 1
 
     ## make bigram
-    # add BOS and EOS
-    words.insert(0, 'BOS')
-    words.append('EOS')
     for i in range(len(words)-1):
         if words[i] == '__stop__' or words[i+1] == '__stop__':
             continue
@@ -109,7 +111,7 @@ def read_data(fn):
         
         tab = e.split(' ')
         # label -> [0]
-        label = tab[0]
+        label = int(tab[0])
         # words -> [1, 2, ...]
         words = tab[1:]
 
@@ -136,7 +138,39 @@ def is_stop_word(inp):
 data = read_data('sentiment.txt')
 for e in data:
     e.feat = create_feat(e.words)
-    print('sentence: {}'.format(e.sentence))
-    print(' -> feat: {}'.format(sorted(e.feat.keys())))
+# creat feat vs. freq
+feat2freq = {}
+for e in data:
+    for ef in e.feat:
+        if ef not in feat2freq:
+            feat2freq[ef] = 0
+        feat2freq[ef] += 1
+# delete singleton and make feat to be used
+feat2id = {}
+for k, v in feat2freq.items():
+    if v>1:
+        feat2id[k] = len(feat2id)
+    else:
+        #print('{} is deleted.'.format(k))
+        pass
+# make feature vector
+for ed in data:
+    vec = [0.0] *  len(feat2id)
+    to_be_del = []
+    for ef in ed.feat.keys():
+        if ef in feat2id:
+            vec[feat2id[ef]] = 1.0
+        else:
+            to_be_del.append(ef)
+    # add feature vector
+    ed.feat_vec = vec
+    # delete unregistered feature
+    for ef in to_be_del:
+        del(ed.feat[ef])
+
+
+for ed in data:
+    print('sentence: {}'.format(ed.sentence))
+    print(' -> feat: {}'.format(' '.join(sorted(ed.feat.keys()))))
 
 
