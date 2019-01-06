@@ -29,7 +29,6 @@
   Xという -> Y
 '''
 
-import sys
 import re
 
 class Chunk(object):
