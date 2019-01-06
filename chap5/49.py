@@ -256,7 +256,7 @@ def get_chk_meet(chunks, idx_x, idx_y):
     return min(idx_and.keys())
     
  
-def make_path_to_one_step_before_of_goal(chunks, idx_start, idx_goal):
+def make_path_to_one_step_before_goal(chunks, idx_start, idx_goal):
 
     ret = []
     i = idx_start
@@ -268,8 +268,8 @@ def make_path_to_one_step_before_of_goal(chunks, idx_start, idx_goal):
 def make_str_for_indirect_connection(chunks, idx_x, idx_y, idx_meet):
 
     # make list from idx_x to one step before of idx_meet
-    chk_x = make_path_to_one_step_before_of_goal(chunks, idx_x, idx_meet)
-    chk_y = make_path_to_one_step_before_of_goal(chunks, idx_y, idx_meet)
+    chk_x = make_path_to_one_step_before_goal(chunks, idx_x, idx_meet)
+    chk_y = make_path_to_one_step_before_goal(chunks, idx_y, idx_meet)
 
     # make string
     surface_x = []
@@ -291,10 +291,7 @@ def make_str_for_indirect_connection(chunks, idx_x, idx_y, idx_meet):
     return '{} | {} | {}'.format(' -> '.join(surface_x), ' -> '.join(surface_y), surface_meet)
 
 
-
-
-
-def process_for_a_chunk_pair(chunks, idx_x, idx_y):
+def process_a_chunk_pair(chunks, idx_x, idx_y):
 
     # search direct path from x to y, and make chunk string
     chk_str = []
@@ -325,7 +322,7 @@ def process_for_a_chunk_pair(chunks, idx_x, idx_y):
     return ret
 
 
-def process_for_one_sentence(chunks):
+def process_one_sentence(chunks):
 
     # enumerate all chunks having noun
     chk_noun = []
@@ -336,7 +333,7 @@ def process_for_one_sentence(chunks):
     # test all "noun phrase" pairs
     for idx_x in range(len(chk_noun)-1):
         for idx_y in range(idx_x+1, len(chk_noun)):
-            ret = process_for_a_chunk_pair(chunks, chk_noun[idx_x], chk_noun[idx_y])
+            ret = process_a_chunk_pair(chunks, chk_noun[idx_x], chk_noun[idx_y])
 
             ret = delete_symbols(ret)
             print(ret)
@@ -345,4 +342,4 @@ def process_for_one_sentence(chunks):
 buf = read_parsed()
 for es in buf:
     # es ... a sentence
-    process_for_one_sentence(es)
+    process_one_sentence(es)
