@@ -51,7 +51,7 @@ def create_feat(org_words):
 
     # make unigram and bigram feat
 
-    # to aviid changing original memory
+    # to avoid changing original memory
     words = list(org_words)
 
     # delete symbol tokens
