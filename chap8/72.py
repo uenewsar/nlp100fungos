@@ -11,7 +11,14 @@
 
 import re
 import sys
-from stemming.porter2 import stem
+import stemming.porter2
+
+# as stemming.porter2.stem is a little bit slow, use cache.
+stem_cache = {}
+def stem(inp):
+    if inp not in stem_cache:
+        stem_cache[inp] = stemming.porter2.stem(inp)
+    return stem_cache[inp]
 
 # from https://gist.github.com/sebleier/554280
 stop_words = {
@@ -47,7 +54,7 @@ class Instance(object):
         self.feat = None
         self.feat_vec = None
 
-def create_feat(org_words):
+def create_feat(org_words, feat2id=None):
 
     # make unigram and bigram feat
 
@@ -58,7 +65,7 @@ def create_feat(org_words):
     tmp = []
     for e in words:
         if not re.search(r'^[^0-9a-zA-Z]+$', e):
-            # if it is NOT only-symbol word
+            # use if the word is NOT only-symbol word
             tmp.append(e)
     words = tmp
 
@@ -66,7 +73,7 @@ def create_feat(org_words):
     for i in range(len(words)):
         words[i] = stem(words[i])
     
-    # assign flag to stop words
+    # assign flag for showing stop words
     for i in range(len(words)):
         if is_stop_word(words[i]):
             words[i] = '__stop__'
@@ -92,9 +99,24 @@ def create_feat(org_words):
     # no matter how much one feature exist in one sentence,
     # the value of feature is set to 1.
 
+    # if each feature is not defined in feat2id, delete
+    vec = None
+    if feat2id is not None:
+        tmp = {}
+        for ef in feat.keys():
+            if ef in feat2id:
+                tmp[ef] = 1
+        feat = tmp
+
+        # also make feature vector
+        vec = [0.0] * len(feat2id)
+        for ef in feat.keys():
+            vec[feat2id[ef]] = 1.0
+
+
     # debug
     #sys.stderr.write('[{}]\n  -> [{}]\n'.format(' '.join(org_words), ' '.join(sorted(feat.keys()))))
-    return feat
+    return (feat, vec)
 
 
 def read_data(fn):
@@ -134,40 +156,47 @@ def is_stop_word(inp):
     else:
         return False
 
-# main
+
+def make_feat_to_be_used(data):
+
+    # from raw features, extract actual features to be used.
+
+    # creat feat vs. freq
+    feat2freq = {}
+    for e in data:
+        for ef in e.feat:
+            if ef not in feat2freq:
+                feat2freq[ef] = 0
+            feat2freq[ef] += 1
+
+    # delete singleton and make feat to be used
+    feat2id = {}
+    for k, v in feat2freq.items():
+        if v>1:
+            feat2id[k] = len(feat2id)
+        else:
+            #print('{} is deleted.'.format(k))
+            pass
+
+    return feat2id
+
+## main
 data = read_data('sentiment.txt')
+
+# first, makes all possible features
 for e in data:
-    e.feat = create_feat(e.words)
-# creat feat vs. freq
-feat2freq = {}
-for e in data:
-    for ef in e.feat:
-        if ef not in feat2freq:
-            feat2freq[ef] = 0
-        feat2freq[ef] += 1
-# delete singleton and make feat to be used
-feat2id = {}
-for k, v in feat2freq.items():
-    if v>1:
-        feat2id[k] = len(feat2id)
-    else:
-        #print('{} is deleted.'.format(k))
-        pass
+    (e.feat, _) = create_feat(e.words)
+
+# make actual features to be used
+feat2id = make_feat_to_be_used(data)
+
+#for e in sorted(feat2id.keys()):
+#    print('{} {}'.format(e, feat2id[e]))
+#exit()
+
 # make feature vector
 for ed in data:
-    vec = [0.0] *  len(feat2id)
-    to_be_del = []
-    for ef in ed.feat.keys():
-        if ef in feat2id:
-            vec[feat2id[ef]] = 1.0
-        else:
-            to_be_del.append(ef)
-    # add feature vector
-    ed.feat_vec = vec
-    # delete unregistered feature
-    for ef in to_be_del:
-        del(ed.feat[ef])
-
+    (ed.feat, ed.feat_vec) = create_feat(ed.words, feat2id)
 
 for ed in data:
     print('sentence: {}'.format(ed.sentence))

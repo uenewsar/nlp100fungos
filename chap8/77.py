@@ -233,7 +233,7 @@ for ed in data:
     elif est_label==-1 and ed.label==1:
         mat['FN'] += 1
     elif est_label==-1 and ed.label==-1:
-        mat['TP'] += 1
+        mat['TN'] += 1
     else:
         raise Exception('error')
 
