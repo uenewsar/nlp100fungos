@@ -19,7 +19,7 @@ chap6  not started
 
 chap7  not started
 
-chap8  ongoing
+chap8  completed
 
 chap9  not started
 
