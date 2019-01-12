@@ -21,6 +21,6 @@ chap7  not started
 
 chap8  completed
 
-chap9  ongoing
+chap9  completed
 
 chap10 not started
