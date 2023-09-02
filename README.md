@@ -1,9 +1,6 @@
-# nlp100fungos
-言語処理100本ノック (NLP 100 fungos)
+# 言語処理100本ノック2020 (NLP 100 Exercise 2020)
 
-Python3 codes
-
-http://www.cl.ecei.tohoku.ac.jp/nlp100/#
+https://nlp100.github.io/ja/
 
 chap1  completed
 
