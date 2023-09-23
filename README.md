@@ -12,7 +12,7 @@ chap4  completed
 
 chap5  completed
 
-chap6  not started
+chap6  started
 
 chap7  not started
 
