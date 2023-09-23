@@ -70,8 +70,8 @@ def main():
     # save model
     fn = 'logistic_regression_model.pickle'
     print('saving model to {}'.format(fn))
-    with open(fn, 'wb') as fr:
-        pickle.dump(clf, fr)
+    with open(fn, 'wb') as fw:
+        pickle.dump(clf, fw)
         
 
 if __name__=='__main__':
