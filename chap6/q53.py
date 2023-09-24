@@ -15,7 +15,11 @@ from q51 import NLTKWrapper, create_features
 
 def do_predict(sentences, nltk_wrapper, feat_dict, label_dict, clf):
     # convert sentence to features
-    (feat, _) = create_features(sentences, nltk_wrapper=nltk_wrapper, feat_dict=feat_dict)
+    (feat, _) = create_features(
+        sentences,
+        nltk_wrapper=nltk_wrapper,
+        feat_dict=feat_dict
+    )
     num_dict_id = max(feat_dict.values())+1
 
     # convert features to a matrix
@@ -27,7 +31,6 @@ def do_predict(sentences, nltk_wrapper, feat_dict, label_dict, clf):
     # predict probabilities of classes
     y = clf.predict_proba(x)
 
-    
     # convert label-probabilities
     id2label = {}
     for (el, ei) in label_dict.items():
@@ -46,7 +49,6 @@ def do_predict(sentences, nltk_wrapper, feat_dict, label_dict, clf):
 
 
 def main():
-
 
     # read dictionaries
     with open('data/feature_dictionary.txt', 'r', encoding='utf-8') as fr:
