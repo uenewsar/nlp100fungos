@@ -25,7 +25,7 @@ def read_data(fn):
             })
     return ret
 
-def get_num_dict_id(fn):
+def get_num_dict(fn):
     with open(fn, 'r', encoding='utf-8') as fr:
         obj = eval(fr.read())
     return max(list(obj.values()))+1
@@ -58,10 +58,10 @@ def main():
     # read training data
     train = read_data('data/train.feature.txt')
     # get num of feature from dictionary
-    num_dict_id = get_num_dict_id('data/feature_dictionary.txt')
+    num_feat = get_num_dict('data/feature_dictionary.txt')
 
     # read training data and convert to numpy array
-    (x, y) = read_feature_label('data/train.feature.txt', num_dict_id)
+    (x, y) = read_feature_label('data/train.feature.txt', num_feat)
 
     # train classifier model
     print('training model ...')
