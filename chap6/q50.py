@@ -59,6 +59,15 @@ def read_news():
         'Daily Mail': 0
     }
 
+    # formal name of category
+    shortcat2cat = {
+        'b': 'business',
+        't': 'science and technology',
+        'e': 'entertainment',
+        'm': 'health'
+    }
+        
+
     ret = []
 
     with open(fn, 'r') as fr:
@@ -70,7 +79,7 @@ def read_news():
                 continue
             pub2cnt[e[3]] += 1
             # extract category and title
-            ret.append( [e[4], e[1]])
+            ret.append( [shortcat2cat[e[4]], e[1]])
 
     print('number of articles of publishers')
     pprint(pub2cnt)
@@ -114,11 +123,14 @@ def main():
     # shuffle order
     random.seed(42)
     random.shuffle(obj)
+
+    # make directory to store data
+    os.makedirs('data', exist_ok=True)
     
     # write training data
-    write_csv(obj[0 : int(len(obj)*0.8)], 'train.txt', list(cat2num.keys()))
-    write_csv(obj[int(len(obj)*0.8) : int(len(obj)*0.9)], 'valid.txt', list(cat2num.keys()))
-    write_csv(obj[int(len(obj)*0.9) : ], 'test.txt', list(cat2num.keys()))
+    write_csv(obj[0 : int(len(obj)*0.8)], 'data/train.txt', list(cat2num.keys()))
+    write_csv(obj[int(len(obj)*0.8) : int(len(obj)*0.9)], 'data/valid.txt', list(cat2num.keys()))
+    write_csv(obj[int(len(obj)*0.9) : ], 'data/test.txt', list(cat2num.keys()))
     
 
 if __name__=='__main__':
