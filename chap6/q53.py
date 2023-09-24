@@ -11,49 +11,6 @@ import pickle
 from tabulate import tabulate
 from sklearn.linear_model import LogisticRegression
 from q51 import NLTKWrapper, create_features
-    
-def read_data(fn):
-    '''
-    Read data in CSV
-    '''
-    ret = []
-    with open(fn, 'r') as fr:
-        cr = csv.reader(fr, delimiter='\t')
-        # format: category \t feature vector
-        for e in cr:
-            ret.append({
-                'category': e[0],
-                'feature': eval(e[1])
-            })
-    return ret
-
-def get_num_dict_id(fn):
-    with open(fn, 'r', encoding='utf-8') as fr:
-        obj = eval(fr.read())
-    return max(list(obj.values()))+1
-
-
-def read_feature_label(fn, num_dict_id):
-
-    obj = []
-    with open(fn, 'r') as fr:
-        cr = csv.reader(fr, delimiter='\t')
-        # format: label \t feature vector
-        for e in cr:
-            obj.append({
-                'label': int(e[0]),
-                'feature': eval(e[1])
-            })
-
-    x = np.zeros( (len(obj), num_dict_id) )
-    y = np.zeros( (len(obj),), dtype=np.int32)
-
-    for i in range(len(obj)):
-        y[i] = obj[i]['label']
-        for (ek, ev) in obj[i]['feature'].items():
-            x[i][ek] = ev
-
-    return (x, y)
 
 
 def do_predict(sentences, nltk_wrapper, feat_dict, label_dict, clf):
@@ -107,8 +64,8 @@ def main():
         clf = pickle.load(fr)
     
     
-    # sample input sentence
-    sentences = [
+    # sample titles
+    titles = [
         'Stock price raised',
         'Vaccine developed by pharmaceutical company',
         'Michael Jackson won Grammy prize',
@@ -117,9 +74,9 @@ def main():
 
           
     # do prediction
-    for es in sentences:
+    for es in titles:
         proba = do_predict([es], nltk_wrapper, feat_dict, label_dict, clf)
-        print('INPUT: {}'.format(es))
+        print('TITLE: {}'.format(es))
         print(tabulate(proba[0]))
     
 
