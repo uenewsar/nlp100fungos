@@ -183,15 +183,17 @@ def delete_singleton(obj):
     
 
         
-def create_featrures(obj, nltk_wrapper=None, feat_dict=None, create_feat_dict=False):
+def create_features(obj, nltk_wrapper=None, feat_dict=None, create_feat_dict=False):
 
     if feat_dict is None and create_feat_dict is False:
         raise Exception('error: create_feat_dict must be True when feat_dict is None')
     
     ret = []
     print('converting sentences to features ...')
+    assert(type(obj) is list)
     for e in tqdm(obj):
-        ret.append(conv_sent_to_feat_vect(e['title'], nltk_wrapper=nltk_wrapper))
+        assert(type(e) is str)
+        ret.append(conv_sent_to_feat_vect(e, nltk_wrapper=nltk_wrapper))
     obj = ret
 
     if create_feat_dict:
@@ -260,10 +262,10 @@ def main():
     '''
     # read
     print('processing training data')
-    train = read_csv('train.txt')
+    train = read_csv('data/train.txt')
     # create feature and feature dictionary
-    (feat, feat_dict)  = create_featrures(
-        train,
+    (feat, feat_dict)  = create_features(
+        [x['title'] for x in train],
         nltk_wrapper=nltk_wrapper,
         create_feat_dict=True
     )
@@ -278,13 +280,13 @@ def main():
         label_dict[e] = len(label_dict)
 
     train = add_feat_to_data(train, feat, label_dict)
-    write_csv(train, 'train.feature.txt')
+    write_csv(train, 'data/train.feature.txt')
 
     # store label dictionary
-    with open('label_dictionary.txt', 'w', encoding='utf-8') as fw:
+    with open('data/label_dictionary.txt', 'w', encoding='utf-8') as fw:
         fw.write(str(label_dict))
     # store feature dictionary
-    with open('feature_dictionary.txt', 'w', encoding='utf-8') as fw:
+    with open('data/feature_dictionary.txt', 'w', encoding='utf-8') as fw:
         fw.write(str(feat_dict))
 
     
@@ -292,20 +294,28 @@ def main():
     validation data
     '''
     print('processing validation data')
-    valid = read_csv('valid.txt')
-    (feat, _)  = create_featrures(valid, nltk_wrapper=nltk_wrapper, feat_dict=feat_dict)
+    valid = read_csv('data/valid.txt')
+    (feat, _)  = create_features(
+        [x['title'] for x in valid],
+        nltk_wrapper=nltk_wrapper,
+        feat_dict=feat_dict
+    )
     valid = add_feat_to_data(valid, feat, label_dict)
-    write_csv(valid, 'valid.feature.txt')
+    write_csv(valid, 'data/valid.feature.txt')
     
     '''
     test data
     '''
     print('processing test data')
-    test = read_csv('test.txt')
+    test = read_csv('data/test.txt')
     # create feature and feature dictionary
-    (feat, _)  = create_featrures(test, nltk_wrapper=nltk_wrapper, feat_dict=feat_dict)
+    (feat, _)  = create_features(
+        [x['title'] for x in test],
+        nltk_wrapper=nltk_wrapper,
+        feat_dict=feat_dict
+    )
     test = add_feat_to_data(test, feat, label_dict)
-    write_csv(test, 'test.feature.txt')
+    write_csv(test, 'data/test.feature.txt')
 
     
 
