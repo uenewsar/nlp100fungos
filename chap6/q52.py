@@ -56,19 +56,19 @@ def read_feature_label(fn, num_dict_id):
 def main():
 
     # read training data
-    train = read_data('train.feature.txt')
+    train = read_data('data/train.feature.txt')
     # get num of feature from dictionary
-    num_dict_id = get_num_dict_id('feature_dictionary.txt')
+    num_dict_id = get_num_dict_id('data/feature_dictionary.txt')
 
     # read training data and convert to numpy array
-    (x, y) = read_feature_label('train.feature.txt', num_dict_id)
+    (x, y) = read_feature_label('data/train.feature.txt', num_dict_id)
 
     # train classifier model
     print('training model ...')
     clf = LogisticRegression(random_state=42, solver='liblinear').fit(x, y)
 
     # save model
-    fn = 'logistic_regression_model.pickle'
+    fn = 'data/logistic_regression_model.pickle'
     print('saving model to {}'.format(fn))
     with open(fn, 'wb') as fw:
         pickle.dump(clf, fw)
