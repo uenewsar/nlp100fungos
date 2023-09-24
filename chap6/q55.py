@@ -12,7 +12,6 @@ import pickle
 from tabulate import tabulate
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix
-from q51 import NLTKWrapper, create_features
 from q52 import get_num_dict    
 from q54 import read_feature_label    
 
@@ -49,7 +48,6 @@ def main():
 
     # read label
     labels = conv_dict_to_simple_list('data/label_dictionary.txt')
-    print(labels)
     print('class id to label')
     for (ei, el) in enumerate(labels):
         print(' {} {}'.format(ei, el))
