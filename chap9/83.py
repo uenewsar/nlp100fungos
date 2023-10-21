@@ -11,6 +11,7 @@
 
 import pickle
 import sys
+from tqdm import tqdm
 
 def write_res(word2idx, idx2word, ftc, ft, fc, N, fn):
     with open(fn, 'wb') as fw:
@@ -18,8 +19,6 @@ def write_res(word2idx, idx2word, ftc, ft, fc, N, fn):
 
 
 ## main
-# read outcome of 82
-fr = open('context.txt', 'r', encoding='utf-8')
 
 # initialize variables
 # f(t,c)
@@ -36,7 +35,19 @@ N = 0
 idx2word = {}
 word2idx = {}
 
+# count lines of input files
+sys.stderr.write(' counting lines of context.txt\n')
+with open('context.txt', 'r', encoding='utf-8') as fr:
+    total = sum(1 for _ in tqdm(fr))
+
+# read outcome of 82
+fr = open('context.txt', 'r', encoding='utf-8')
+
+pbar = tqdm(total=total, ascii=True)
+
 for line in fr:
+
+    pbar.update(1)
 
     # there are some cases that line doesn't have two colums, so use strip (not rstrip)
     # to remove all unnecessary spaces
@@ -79,13 +90,9 @@ for line in fr:
     fc[c] += 1
 
     N += 1
-    if N % 10000000 == 0:
-        sys.stderr.write(' N={}\n'.format(N))
-    #if N % 100000000 == 0:
-    #    break
                              
 
-
+pbar.close()
 fr.close()
 
 # write final result
