@@ -12,7 +12,7 @@ chap4  completed
 
 chap5  completed
 
-chap6  on-going (done 50-58)
+chap6  completed
 
 chap7  not started
 
