@@ -30,27 +30,36 @@ enwiki-20150112-400-r10-105752.txt.bz2は，2015年1月12日時点の
 import re
 import bz2
 import sys
+from tqdm import tqdm
 
-## main
-fw = open('text.txt', 'w', encoding='utf-8')
-with bz2.open("enwiki-20150112-400-r10-105752.txt.bz2", "rt", encoding="utf_8") as fr:
-    cnt = 0
-    for line in fr:
 
-        cnt += 1
-        if cnt % 100000 == 0:
-            sys.stderr.write(' {}\n'.format(cnt))
+def main():
 
-        line = line.rstrip()
-        words = line.split(' ')
-        buf = []
-        for e in words:
-            e = re.sub(r'^[\.\,\!\?\;\:\(\)\[\]\'\"]+', '', e)
-            e = re.sub(r'[\.\,\!\?\;\:\(\)\[\]\'\"]+$', '', e)
-            if e != '':
-                buf.append(e)
+    fw = open('text.txt', 'w', encoding='utf-8')
 
-        if len(buf) > 0:
-            fw.write(' '.join(buf) + '\n')
+    PTN1 = re.compile(r'^[\.\,\!\?\;\:\(\)\[\]\'\"]+')
+    PTN2 = re.compile(r'[\.\,\!\?\;\:\(\)\[\]\'\"]+$')
 
-fw.close()
+
+    with bz2.open("enwiki-20150112-400-r10-105752.txt.bz2", "rt", encoding="utf_8") as fr:
+        for line in tqdm(fr):
+        
+            line = line.rstrip()
+            words = line.split(' ')
+            buf = []
+            for e in words:
+                #e = re.sub(r'^[\.\,\!\?\;\:\(\)\[\]\'\"]+', '', e)
+                #e = re.sub(r'[\.\,\!\?\;\:\(\)\[\]\'\"]+$', '', e)
+                e = PTN1.sub('', e)
+                e = PTN2.sub('', e)
+                if e != '':
+                    buf.append(e)
+
+            if len(buf) > 0:
+                fw.write(' '.join(buf) + '\n')
+
+    fw.close()
+
+if __name__=='__main__':
+    main()
+

@@ -22,48 +22,54 @@ https://en.wikipedia.org/wiki/List_of_sovereign_states
 
 import re
 import sys
+from tqdm import tqdm
 
-## main
-# read country list
-country_list = []
-fr = open('country_list.txt', 'r', encoding='utf-8')
-for line in fr:
-    line = line.rstrip()
-    if re.search(r'^#', line):
-        continue
-    if re.search(r' ', line):
-        country_list.append(line)
-fr.close()
-# sort by descending length
-country_list.sort(key=len)
-country_list.reverse()
 
-# make replaced sentence
-tmp = []
-for e in country_list:
-    tmp.append( (e, re.sub(r' ', '_', e)) )
-country_list = tmp
+def main():
+    
+    # read country list
+    country_list = []
+    fr = open('country_list.txt', 'r', encoding='utf-8')
+    for line in fr:
+        line = line.rstrip()
+        if re.search(r'^#', line):
+            continue
+        if re.search(r' ', line):
+            country_list.append(line)
+    fr.close()
+    
+    # sort by descending length
+    country_list.sort(key=len)
+    country_list.reverse()
 
-fr = open('text.txt', 'r', encoding='utf-8')
-fw = open('text2.txt', 'w', encoding='utf-8')
-cnt = 0
-for line in fr:
-    cnt += 1
-    if cnt % 10000 == 0:
-        sys.stderr.write(' {}\n'.format(cnt))
+    # make replaced sentence
+    tmp = []
+    for e in country_list:
+        tmp.append( (e, re.sub(r' ', '_', e)) )
+    country_list = tmp
 
-    line = line.rstrip()
+    PTN1 = re.compile(r'^ ')
+    PTN2 = re.compile(r' $')
 
-    # replace
-    line = ' {} '.format(line)
-    for (src, dst) in country_list:
-        # str.replace process is much faster than regexp process
-        #line = re.sub(re.escape(' {} '.format(src)), ' {} '.format(dst), line)
-        line = line.replace(' {} '.format(src), ' {} '.format(dst))
-    line = re.sub(r'^ ', '', line)
-    line = re.sub(r' $', '', line)
+    fw = open('text2.txt', 'w', encoding='utf-8')
 
-    fw.write(line + '\n')
+    with open('text.txt', 'r', encoding='utf-8') as fr:
+        for line in tqdm(fr):
+            line = line.rstrip()
 
-fw.close()
-fr.close()
+            # replace
+            line = ' {} '.format(line)
+            for (src, dst) in country_list:
+                # str.replace process is much faster than regexp process
+                #line = re.sub(re.escape(' {} '.format(src)), ' {} '.format(dst), line)
+                line = line.replace(' {} '.format(src), ' {} '.format(dst))
+            line = PTN1.sub('', line)
+            line = PTN2.sub('', line)
+        
+            fw.write(line + '\n')
+
+    fw.close()
+
+
+if __name__=='__main__':
+    main()
