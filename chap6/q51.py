@@ -172,7 +172,7 @@ def delete_singleton(obj):
     print('deleting sigletons ...')
     
     ret = []
-    for es in tqdm(obj):
+    for es in tqdm(obj, ascii=True):
         tmp = []
         for ef in es:
             if feat2cnt[str(ef)] > 1:
@@ -191,7 +191,7 @@ def create_features(obj, nltk_wrapper=None, feat_dict=None, create_feat_dict=Fal
     ret = []
     print('converting sentences to features ...')
     assert(type(obj) is list)
-    for e in tqdm(obj):
+    for e in tqdm(obj, ascii=True):
         assert(type(e) is str)
         ret.append(conv_sent_to_feat_vect(e, nltk_wrapper=nltk_wrapper))
     obj = ret
