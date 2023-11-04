@@ -6,7 +6,7 @@ chap1  completed
 
 chap2  completed
 
-chap3  not started
+chap3  started
 
 chap4  completed
 
