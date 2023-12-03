@@ -2,22 +2,17 @@
 
 https://nlp100.github.io/ja/
 
-chap1  completed
+| Chapter | Status |
+| ---- | ---- |
+| Chapter 1 | Completed |
+| Chapter 2 | Completed |
+| Chapter 3 | Completed |
+| Chapter 4 | Completed |
+| Chapter 5 | Completed |
+| Chapter 6 | Completed |
+| Chapter 7 | Not started |
+| Chapter 8 | Completed |
+| Chapter 9 | Completed |
+| Chapter 10 | Not started |
 
-chap2  completed
 
-chap3  completed
-
-chap4  completed
-
-chap5  completed
-
-chap6  completed
-
-chap7  not started
-
-chap8  completed
-
-chap9  completed
-
-chap10 not started
