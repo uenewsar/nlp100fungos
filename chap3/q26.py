@@ -16,14 +16,18 @@ import pprint
 def process(inp):
 
     while True:
+
+        # ''''斜体と強調'''''
         m = re.search(r"''''([^']+?)''''", inp)
         if m:
             inp = inp[:m.span()[0]] + m.group(1) + inp[m.span()[1]:]
             continue
+        # '''強調'''
         m = re.search(r"'''([^']+?)'''", inp)
         if m:
             inp = inp[:m.span()[0]] + m.group(1) + inp[m.span()[1]:]
             continue
+        # ''他との区別''
         m = re.search(r"''([^']+?)''", inp)
         if m:
             inp = inp[:m.span()[0]] + m.group(1) + inp[m.span()[1]:]
@@ -60,7 +64,8 @@ def main():
                     org_value = value
                     value = process(value)
                     if value != org_value:
-                        print('changed from "{}" to "{}"'.format(org_value, value))
+                        print('changed from "{}"'.format(org_value))
+                        print('        to   "{}"'.format(value))
                     obj[key] = value
 
     pprint.pprint(obj)
