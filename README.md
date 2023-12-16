@@ -10,9 +10,7 @@ https://nlp100.github.io/ja/
 | Chapter 4 | Completed |
 | Chapter 5 | Completed |
 | Chapter 6 | Completed |
-| Chapter 7 | Not started |
+| Chapter 7 | Started |
 | Chapter 8 | Completed |
 | Chapter 9 | Completed |
 | Chapter 10 | Not started |
-
-
