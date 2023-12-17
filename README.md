@@ -11,7 +11,7 @@ It contains both 2015 and 2020 practices.<br>
 | Chapter 3 | Completed | 2020 |
 | Chapter 4 | Completed | 2015 |
 | Chapter 5 | Completed | 2015 |
-| Chapter 6 | Completed | 2015 |
+| Chapter 6 | Completed | 2020 |
 | Chapter 7 | Started | 2020 |
 | Chapter 8 | Completed | 2015 |
 | Chapter 9 | Completed | 2015 |
